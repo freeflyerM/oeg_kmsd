@@ -57,11 +57,11 @@ Small sample
 I've done a small sample to extract the Modbus informations and publish them on a MQTT broker. This is enough for me 
 to monitor the KMS-D. 
 
-### KS2W Registers
+### KS2W and KSW* Registers
 
-(Could be valid for models KSW-E*, KSW* too as they share the same documentation)
+(Could be valid for model KSW-E* too as they share the same documentation)
 
-The following registers have been identified with the KS2W model and might differ from the KMS-D+ registers.
+The following registers have been identified with the KS2W and KSW* model and might differ from the KMS-D+ registers.
 This is the result of querying registers up to 10000 to check which returned values. All registers listed below can be 
 read using the `read_register` method with the default `function_code` 3 and are signed. Some are decimal values, in which 
 case `decimals` should be set to 1, some others are enumerations, typically described by integer values starting at 0.
@@ -70,7 +70,9 @@ case `decimals` should be set to 1, some others are enumerations, typically desc
 | --- | --- |
 | 0 - 59 | Various information including date, temperatures, circulations |
 | 100 - 135 | Unknown |
-| 400 - 459 | Unknown |
+| 400 - 420 | Unknown |
+| 421 - 441 | Unknown but interesting |
+| 442 - 459 | Unknown |
 | 700 - 867 | Could be time programming: 28 blocks of 6 registers for 7 days * 4 programs |
 | 400 - 459 | Unknown |
 | 1000 - 1199 | Settings current values |
@@ -84,7 +86,7 @@ case `decimals` should be set to 1, some others are enumerations, typically desc
 | 0-6 | Could be time. Register 0 definitely tracks seconds and when it reaches its maximum value, it resets to 0 and value of register 1 is incremented by 1 |
 | 13 | Set point temperature - Tank bottom |
 | 15 | Set point temperature - Tank top |
-| 29 | Language setting (2=French) |
+| 29 | Language setting (1=German,2=French) |
 | 31 | Circulator R2 status: 0=OFF; 1=40%; 2=55%; 3=70%, 4=85%, 5=ON. Could possibly depend on how the circulator is controlled (RPM, ON/OFF, PWM), see setting S3.1 |
 | 34 | Circulators modes: 0 = R1 AUTO/R2 AUTO;  1 = R1 MANUAL/R2 AUTO; 2 = R1 AUTO/R2 MANUAL;  3 = R1 MANUAL/R2 MANUAL;|
 | 35 | Circulators ON/OFF: 0 = R1 OFF/R2 OFF;  1 = R1 ON/R2 OFF; 2 = R1 OFF/R2 ON;  3 = R1 ON/R2 ON;|
@@ -92,6 +94,17 @@ case `decimals` should be set to 1, some others are enumerations, typically desc
 | 39 | T2 |
 | 40 | T3 |
 | 41 | T4 |
+| 43 | TC |
+| 47 | Unclear; Connected to Circulator status |
+| 48 | Unclear; Connected to Circulator status |
+| 49 | Could be daily produced Energy in KWh |
+| 50 | Unclear but increments exactly like Reg 49 --> KWh (weekly?, monthly?, ...) |
+| 50 | Unclear but increments exactly like Reg 49 --> KWh (weekly?, monthly?, ...) -->  |
+| 58 | Unclear; Interesting |
+|400 | Could be R1 in hours |
+|401 | Could be R2 in hours |
+| 422| Unclear but increments exactly like Reg 49 --> KWh (weekly?, monthly?, ...) --> My guess weekly |
+| 440| Unclear but increments exactly like Reg 49 --> KWh (weekly?, monthly?, ...) --> My guess monthly|
 
 ##### Settings
 Minimum and maximum values should probably not be written to.
